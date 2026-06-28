@@ -133,13 +133,65 @@ body {
   margin: 36px 0 32px;
   display: flex;
   justify-content: center;
+  position: relative;
+}
+
+.grass-layer {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  width: 100vw;
+  max-width: 600px;
+  height: 46px;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 0;
+}
+
+.grass-blade {
+  transform: scaleY(0);
+  animation: grass-grow 0.9s ease-out forwards;
+}
+
+@keyframes grass-grow {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grass-blade {
+    animation: none;
+    transform: scaleY(1);
+  }
 }
 
 .sunflower-svg {
+  position: relative;
+  z-index: 1;
   width: 240px;
   height: 280px;
   overflow: visible;
   filter: drop-shadow(0 0 18px rgba(232,180,60,0.22));
+  transform-origin: 50% 96%;
+  animation: sunflower-sway 7s ease-in-out infinite, sunflower-glow 5s ease-in-out infinite;
+}
+
+@keyframes sunflower-sway {
+  0%   { transform: rotate(-1.6deg); }
+  50%  { transform: rotate(1.6deg); }
+  100% { transform: rotate(-1.6deg); }
+}
+
+@keyframes sunflower-glow {
+  0%, 100% { filter: drop-shadow(0 0 14px rgba(232,180,60,0.18)); }
+  50%      { filter: drop-shadow(0 0 26px rgba(244,200,90,0.32)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sunflower-svg {
+    animation: none;
+  }
 }
 
 /* Date / location block */
@@ -551,6 +603,107 @@ body {
 
         <!-- Natural Sunflower SVG -->
         <div class="sunflower-wrap">
+          <svg class="grass-layer" viewBox="0 0 600 46" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+              <g class="grass-blade" style="transform-origin:299.6px 44px; animation-delay:0.01s;"><path d="M299.6,44 Q301.3,29.1 303.4,14.2" stroke="#5F7D38" stroke-width="2.11" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:307.3px 44px; animation-delay:0.03s;"><path d="M307.3,44 Q303.7,32.9 299.3,21.7" stroke="#6E8E40" stroke-width="1.93" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:306.9px 44px; animation-delay:0.03s;"><path d="M306.9,44 Q308.6,29.7 310.5,15.5" stroke="#88A858" stroke-width="2.28" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:304.9px 44px; animation-delay:0.03s;"><path d="M304.9,44 Q304.3,30.3 303.5,16.5" stroke="#5F7D38" stroke-width="2.24" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:290.3px 44px; animation-delay:0.04s;"><path d="M290.3,44 Q289.6,29.4 288.7,14.9" stroke="#6E8E40" stroke-width="2.11" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:291.8px 44px; animation-delay:0.04s;"><path d="M291.8,44 Q293.1,31.3 294.6,18.7" stroke="#6E8E40" stroke-width="2.44" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:313.8px 44px; animation-delay:0.04s;"><path d="M313.8,44 Q313.2,32.2 312.3,20.4" stroke="#6E8E40" stroke-width="2.01" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:312.7px 44px; animation-delay:0.04s;"><path d="M312.7,44 Q314.4,30.5 316.5,17.0" stroke="#5F7D38" stroke-width="2.27" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:322.6px 44px; animation-delay:0.08s;"><path d="M322.6,44 Q321.5,27.7 320.0,11.4" stroke="#5F7D38" stroke-width="2.09" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:322.1px 44px; animation-delay:0.08s;"><path d="M322.1,44 Q319.5,27.0 316.4,10.0" stroke="#5F7D38" stroke-width="2.55" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:320.4px 44px; animation-delay:0.08s;"><path d="M320.4,44 Q320.3,32.3 320.2,20.7" stroke="#577330" stroke-width="2.38" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:277.7px 44px; animation-delay:0.08s;"><path d="M277.7,44 Q277.6,32.0 277.4,20.1" stroke="#6E8E40" stroke-width="2.58" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:272.5px 44px; animation-delay:0.11s;"><path d="M272.5,44 Q270.5,29.5 268.0,15.0" stroke="#6E8E40" stroke-width="2.27" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:268.3px 44px; animation-delay:0.11s;"><path d="M268.3,44 Q268.6,30.9 269.1,17.8" stroke="#6E8E40" stroke-width="2.44" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:331.0px 44px; animation-delay:0.11s;"><path d="M331.0,44 Q330.7,33.2 330.4,22.3" stroke="#7E9E4E" stroke-width="2.04" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:337.9px 44px; animation-delay:0.13s;"><path d="M337.9,44 Q338.1,32.5 338.3,21.1" stroke="#6E8E40" stroke-width="2.27" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:262.0px 44px; animation-delay:0.14s;"><path d="M262.0,44 Q259.8,30.6 257.1,17.3" stroke="#577330" stroke-width="2.24" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:341.9px 44px; animation-delay:0.16s;"><path d="M341.9,44 Q339.7,31.3 337.0,18.5" stroke="#88A858" stroke-width="2.33" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:346.1px 44px; animation-delay:0.16s;"><path d="M346.1,44 Q346.3,30.8 346.5,17.7" stroke="#88A858" stroke-width="1.93" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:351.2px 44px; animation-delay:0.18s;"><path d="M351.2,44 Q352.9,33.9 355.0,23.7" stroke="#577330" stroke-width="1.87" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:247.5px 44px; animation-delay:0.18s;"><path d="M247.5,44 Q248.1,28.4 248.8,12.8" stroke="#88A858" stroke-width="2.37" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:249.9px 44px; animation-delay:0.18s;"><path d="M249.9,44 Q249.8,33.1 249.6,22.2" stroke="#7E9E4E" stroke-width="1.89" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:240.8px 44px; animation-delay:0.21s;"><path d="M240.8,44 Q241.1,31.2 241.6,18.3" stroke="#6E8E40" stroke-width="1.96" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:242.4px 44px; animation-delay:0.21s;"><path d="M242.4,44 Q241.1,33.6 239.5,23.2" stroke="#6E8E40" stroke-width="2.27" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:359.9px 44px; animation-delay:0.22s;"><path d="M359.9,44 Q357.7,28.0 355.0,11.9" stroke="#5F7D38" stroke-width="1.93" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:357.8px 44px; animation-delay:0.22s;"><path d="M357.8,44 Q359.5,30.2 361.5,16.3" stroke="#5F7D38" stroke-width="2.24" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:225.8px 44px; animation-delay:0.27s;"><path d="M225.8,44 Q225.4,33.8 224.9,23.6" stroke="#88A858" stroke-width="1.83" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:228.9px 44px; animation-delay:0.27s;"><path d="M228.9,44 Q226.9,33.1 224.6,22.2" stroke="#577330" stroke-width="2.08" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:224.1px 44px; animation-delay:0.27s;"><path d="M224.1,44 Q224.2,34.4 224.2,24.8" stroke="#577330" stroke-width="2.35" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:375.6px 44px; animation-delay:0.27s;"><path d="M375.6,44 Q376.1,32.1 376.6,20.2" stroke="#577330" stroke-width="2.34" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:374.6px 44px; animation-delay:0.27s;"><path d="M374.6,44 Q375.2,31.4 375.9,18.8" stroke="#6E8E40" stroke-width="2.12" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:376.0px 44px; animation-delay:0.27s;"><path d="M376.0,44 Q375.3,32.4 374.5,20.7" stroke="#6E8E40" stroke-width="2.37" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:380.7px 44px; animation-delay:0.29s;"><path d="M380.7,44 Q380.3,33.9 379.8,23.8" stroke="#577330" stroke-width="1.85" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:377.0px 44px; animation-delay:0.29s;"><path d="M377.0,44 Q378.0,30.6 379.2,17.3" stroke="#5F7D38" stroke-width="2.44" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:220.7px 44px; animation-delay:0.30s;"><path d="M220.7,44 Q220.1,33.9 219.4,23.7" stroke="#577330" stroke-width="2.39" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:390.7px 44px; animation-delay:0.33s;"><path d="M390.7,44 Q390.0,32.6 389.2,21.3" stroke="#6E8E40" stroke-width="2.12" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:390.8px 44px; animation-delay:0.33s;"><path d="M390.8,44 Q392.1,29.8 393.6,15.6" stroke="#6E8E40" stroke-width="2.15" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:209.5px 44px; animation-delay:0.34s;"><path d="M209.5,44 Q209.8,32.9 210.1,21.9" stroke="#5F7D38" stroke-width="1.99" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:392.4px 44px; animation-delay:0.34s;"><path d="M392.4,44 Q394.1,33.5 396.1,23.0" stroke="#577330" stroke-width="1.86" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:403.1px 44px; animation-delay:0.37s;"><path d="M403.1,44 Q401.4,33.1 399.3,22.1" stroke="#5F7D38" stroke-width="2.10" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:401.5px 44px; animation-delay:0.37s;"><path d="M401.5,44 Q403.0,32.7 404.8,21.3" stroke="#7E9E4E" stroke-width="2.06" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:198.1px 44px; animation-delay:0.38s;"><path d="M198.1,44 Q197.4,31.2 196.7,18.5" stroke="#577330" stroke-width="2.11" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:193.6px 44px; animation-delay:0.38s;"><path d="M193.6,44 Q192.1,33.5 190.2,22.9" stroke="#88A858" stroke-width="1.82" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:186.7px 44px; animation-delay:0.42s;"><path d="M186.7,44 Q183.1,30.7 178.6,17.4" stroke="#6E8E40" stroke-width="2.08" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:188.4px 44px; animation-delay:0.42s;"><path d="M188.4,44 Q189.0,33.3 189.7,22.7" stroke="#7E9E4E" stroke-width="1.70" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:416.0px 44px; animation-delay:0.44s;"><path d="M416.0,44 Q416.2,35.1 416.5,26.3" stroke="#7E9E4E" stroke-width="2.17" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:176.2px 44px; animation-delay:0.44s;"><path d="M176.2,44 Q172.4,34.8 167.8,25.6" stroke="#5F7D38" stroke-width="2.16" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:179.9px 44px; animation-delay:0.44s;"><path d="M179.9,44 Q178.2,34.8 176.0,25.6" stroke="#577330" stroke-width="2.18" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:179.5px 44px; animation-delay:0.44s;"><path d="M179.5,44 Q178.4,32.0 176.9,20.0" stroke="#5F7D38" stroke-width="2.16" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:425.4px 44px; animation-delay:0.46s;"><path d="M425.4,44 Q423.8,31.6 421.9,19.1" stroke="#88A858" stroke-width="1.78" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:174.3px 44px; animation-delay:0.47s;"><path d="M174.3,44 Q173.0,31.9 171.5,19.9" stroke="#5F7D38" stroke-width="1.74" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:435.0px 44px; animation-delay:0.49s;"><path d="M435.0,44 Q433.5,35.9 431.7,27.7" stroke="#7E9E4E" stroke-width="2.01" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:432.6px 44px; animation-delay:0.49s;"><path d="M432.6,44 Q429.9,35.7 426.6,27.5" stroke="#88A858" stroke-width="1.87" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:160.5px 44px; animation-delay:0.51s;"><path d="M160.5,44 Q158.3,34.4 155.6,24.8" stroke="#577330" stroke-width="1.83" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:159.7px 44px; animation-delay:0.51s;"><path d="M159.7,44 Q160.6,35.6 161.7,27.2" stroke="#5F7D38" stroke-width="2.16" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:441.7px 44px; animation-delay:0.51s;"><path d="M441.7,44 Q441.3,36.0 440.8,27.9" stroke="#577330" stroke-width="1.76" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:439.8px 44px; animation-delay:0.51s;"><path d="M439.8,44 Q439.3,35.2 438.7,26.5" stroke="#7E9E4E" stroke-width="2.20" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:156.2px 44px; animation-delay:0.53s;"><path d="M156.2,44 Q155.2,34.0 154.0,24.0" stroke="#577330" stroke-width="1.94" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:153.7px 44px; animation-delay:0.53s;"><path d="M153.7,44 Q151.3,32.1 148.4,20.2" stroke="#88A858" stroke-width="1.74" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:447.5px 44px; animation-delay:0.55s;"><path d="M447.5,44 Q443.3,35.3 438.2,26.6" stroke="#5F7D38" stroke-width="1.69" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:447.2px 44px; animation-delay:0.55s;"><path d="M447.2,44 Q446.6,33.5 445.8,23.0" stroke="#6E8E40" stroke-width="1.78" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:452.4px 44px; animation-delay:0.55s;"><path d="M452.4,44 Q455.2,34.3 458.5,24.7" stroke="#6E8E40" stroke-width="1.62" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:457.4px 44px; animation-delay:0.57s;"><path d="M457.4,44 Q456.5,31.3 455.4,18.6" stroke="#577330" stroke-width="1.98" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:143.8px 44px; animation-delay:0.57s;"><path d="M143.8,44 Q144.1,32.4 144.4,20.8" stroke="#88A858" stroke-width="1.59" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:138.4px 44px; animation-delay:0.59s;"><path d="M138.4,44 Q139.0,35.4 139.8,26.9" stroke="#6E8E40" stroke-width="1.81" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:462.5px 44px; animation-delay:0.59s;"><path d="M462.5,44 Q463.7,35.0 465.2,26.0" stroke="#88A858" stroke-width="1.73" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:132.0px 44px; animation-delay:0.62s;"><path d="M132.0,44 Q128.8,33.8 124.8,23.6" stroke="#7E9E4E" stroke-width="2.00" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:130.7px 44px; animation-delay:0.62s;"><path d="M130.7,44 Q129.3,33.8 127.6,23.5" stroke="#6E8E40" stroke-width="2.01" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:472.8px 44px; animation-delay:0.63s;"><path d="M472.8,44 Q474.0,35.0 475.5,26.0" stroke="#5F7D38" stroke-width="1.70" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:472.5px 44px; animation-delay:0.63s;"><path d="M472.5,44 Q474.3,35.0 476.6,26.0" stroke="#7E9E4E" stroke-width="1.99" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:480.8px 44px; animation-delay:0.66s;"><path d="M480.8,44 Q480.3,35.0 479.8,25.9" stroke="#577330" stroke-width="2.04" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:478.3px 44px; animation-delay:0.66s;"><path d="M478.3,44 Q479.2,33.1 480.2,22.3" stroke="#6E8E40" stroke-width="1.73" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:489.1px 44px; animation-delay:0.70s;"><path d="M489.1,44 Q486.4,36.1 483.2,28.1" stroke="#88A858" stroke-width="1.73" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:491.9px 44px; animation-delay:0.70s;"><path d="M491.9,44 Q492.8,34.3 493.9,24.5" stroke="#88A858" stroke-width="1.70" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:108.1px 44px; animation-delay:0.70s;"><path d="M108.1,44 Q109.7,34.2 111.6,24.4" stroke="#88A858" stroke-width="1.90" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:498.8px 44px; animation-delay:0.72s;"><path d="M498.8,44 Q500.7,36.6 503.1,29.1" stroke="#5F7D38" stroke-width="1.62" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:101.5px 44px; animation-delay:0.72s;"><path d="M101.5,44 Q98.8,34.2 95.6,24.4" stroke="#6E8E40" stroke-width="1.94" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:103.6px 44px; animation-delay:0.72s;"><path d="M103.6,44 Q103.9,35.2 104.3,26.4" stroke="#7E9E4E" stroke-width="1.80" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:95.2px 44px; animation-delay:0.75s;"><path d="M95.2,44 Q94.2,37.0 93.0,30.0" stroke="#88A858" stroke-width="1.42" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:93.0px 44px; animation-delay:0.75s;"><path d="M93.0,44 Q95.0,35.9 97.4,27.9" stroke="#6E8E40" stroke-width="1.77" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:96.1px 44px; animation-delay:0.75s;"><path d="M96.1,44 Q95.8,35.4 95.5,26.8" stroke="#88A858" stroke-width="1.80" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:503.7px 44px; animation-delay:0.75s;"><path d="M503.7,44 Q503.5,37.0 503.3,30.0" stroke="#7E9E4E" stroke-width="1.85" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:507.6px 44px; animation-delay:0.75s;"><path d="M507.6,44 Q509.4,36.9 511.7,29.8" stroke="#88A858" stroke-width="1.78" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:503.7px 44px; animation-delay:0.75s;"><path d="M503.7,44 Q502.6,35.8 501.2,27.6" stroke="#5F7D38" stroke-width="1.41" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:515.3px 44px; animation-delay:0.78s;"><path d="M515.3,44 Q515.3,38.4 515.2,32.8" stroke="#88A858" stroke-width="1.82" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:76.7px 44px; animation-delay:0.82s;"><path d="M76.7,44 Q74.7,34.2 72.1,24.5" stroke="#7E9E4E" stroke-width="1.57" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:539.4px 44px; animation-delay:0.88s;"><path d="M539.4,44 Q536.8,36.7 533.6,29.4" stroke="#577330" stroke-width="1.32" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:541.8px 44px; animation-delay:0.88s;"><path d="M541.8,44 Q543.8,35.9 546.3,27.7" stroke="#6E8E40" stroke-width="1.44" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:60.9px 44px; animation-delay:0.88s;"><path d="M60.9,44 Q60.0,36.4 58.8,28.9" stroke="#5F7D38" stroke-width="1.32" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:57.4px 44px; animation-delay:0.90s;"><path d="M57.4,44 Q58.4,38.0 59.7,32.1" stroke="#7E9E4E" stroke-width="1.49" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:558.8px 44px; animation-delay:0.94s;"><path d="M558.8,44 Q556.2,37.9 553.0,31.8" stroke="#5F7D38" stroke-width="1.38" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:554.8px 44px; animation-delay:0.94s;"><path d="M554.8,44 Q553.4,38.8 551.6,33.7" stroke="#5F7D38" stroke-width="1.26" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:34.0px 44px; animation-delay:0.97s;"><path d="M34.0,44 Q31.9,38.7 29.4,33.5" stroke="#577330" stroke-width="1.26" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:564.6px 44px; animation-delay:0.98s;"><path d="M564.6,44 Q565.4,38.8 566.4,33.5" stroke="#6E8E40" stroke-width="1.48" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:20.0px 44px; animation-delay:1.02s;"><path d="M20.0,44 Q17.6,39.1 14.7,34.2" stroke="#6E8E40" stroke-width="1.43" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:19.0px 44px; animation-delay:1.02s;"><path d="M19.0,44 Q16.8,38.9 14.1,33.8" stroke="#88A858" stroke-width="1.13" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:582.3px 44px; animation-delay:1.03s;"><path d="M582.3,44 Q583.1,38.8 584.2,33.6" stroke="#5F7D38" stroke-width="1.19" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:583.3px 44px; animation-delay:1.03s;"><path d="M583.3,44 Q584.7,37.9 586.3,31.8" stroke="#577330" stroke-width="1.28" fill="none" stroke-linecap="round"/></g>
+              <g class="grass-blade" style="transform-origin:593.5px 44px; animation-delay:1.07s;"><path d="M593.5,44 Q594.6,38.4 596.0,32.8" stroke="#6E8E40" stroke-width="1.31" fill="none" stroke-linecap="round"/></g>
+          </svg>
           <svg class="sunflower-svg" viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <radialGradient id="petal-main" cx="46%" cy="92%" r="85%" fx="46%" fy="95%">
