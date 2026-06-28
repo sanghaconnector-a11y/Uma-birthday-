@@ -55,11 +55,26 @@ body {
   -webkit-backface-visibility: hidden;
 }
 
+.face-front {
+  position: relative;
+  z-index: 2;
+}
+
 .face-back {
   position: absolute;
   top: 0;
   left: 0;
   transform: rotateY(180deg);
+  z-index: 1;
+  visibility: hidden;
+}
+
+.card-wrap.flipped .face-back {
+  visibility: visible;
+}
+
+.card-wrap.flipped .face-front {
+  visibility: hidden;
 }
 
 /* ── FRONT ── */
@@ -77,6 +92,7 @@ body {
   gap: 0;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .front-header {
@@ -176,6 +192,8 @@ body {
   background: transparent;
   transition: background 0.3s, color 0.3s;
   cursor: pointer;
+  position: relative;
+  z-index: 2;
 }
 
 .rsvp-link:hover {
@@ -193,6 +211,8 @@ body {
   color: #B8A48C;
   cursor: pointer;
   text-align: center;
+  position: relative;
+  z-index: 2;
 }
 
 /* ── BACK ── */
@@ -206,6 +226,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0;
+  cursor: pointer;
 }
 
 .back-header {
@@ -252,6 +273,11 @@ body {
   border-bottom: 1px solid #C4BC9A;
 }
 
+.section-heading strong {
+  font-weight: 700;
+  color: #5A7040;
+}
+
 .section-body {
   font-family: 'Cormorant Garamond', serif;
   font-size: 17px;
@@ -290,6 +316,23 @@ body {
   color: #8A9E6A;
   font-size: 13px;
   top: 2px;
+}
+
+.more-ideas-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #5A7040;
+  text-decoration: underline;
+  cursor: pointer;
+  text-align: left;
+}
+
+.more-ideas-link:hover {
+  color: #3F5429;
 }
 
 .food-row {
@@ -345,6 +388,113 @@ body {
   cursor: pointer;
 }
 
+/* ── MORE IDEAS MODAL ── */
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(74, 59, 40, 0.45);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.modal-overlay.open {
+  display: flex;
+}
+
+.modal-card {
+  background: #F5F0E8;
+  background-image:
+    radial-gradient(ellipse at 8% 6%, rgba(106,120,74,0.08) 0%, transparent 40%),
+    radial-gradient(ellipse at 92% 94%, rgba(106,120,74,0.07) 0%, transparent 38%);
+  width: min(420px, 100%);
+  max-height: 86vh;
+  overflow-y: auto;
+  padding: 40px 32px 32px;
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #A08C6E;
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  color: #5A7040;
+}
+
+.modal-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-style: italic;
+  font-weight: 300;
+  color: #4A3B28;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.modal-group {
+  margin-bottom: 24px;
+}
+
+.modal-group:last-child {
+  margin-bottom: 0;
+}
+
+.modal-group-heading {
+  font-family: 'Jost', sans-serif;
+  font-size: 9.5px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #7A8C60;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #C4BC9A;
+}
+
+.modal-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.modal-list li {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 300;
+  color: #5C4A35;
+  padding-left: 14px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.modal-list li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: #8A9E6A;
+  font-size: 13px;
+  top: 2px;
+}
+
 </style>
 </head>
 <body>
@@ -354,7 +504,7 @@ body {
 
     <!-- ══ FRONT ══ -->
     <div class="face face-front">
-      <div class="front-card">
+      <div class="front-card" id="frontCard">
 
         <!-- Soft botanical corner accents — top left -->
         <svg style="position:absolute;top:18px;left:18px;width:64px;height:64px;opacity:0.18;pointer-events:none;" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -387,199 +537,139 @@ body {
           <h1 class="front-title">Uma's<br><em>Farmers Market</em><br>Birthday</h1>
         </div>
 
-        <!-- Realistic Sunflower SVG -->
+        <!-- Natural Sunflower SVG -->
         <div class="sunflower-wrap">
           <svg class="sunflower-svg" viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <!-- Petal gradients — natural yellow-gold to amber at base -->
-              <radialGradient id="petal-main" cx="50%" cy="85%" r="75%" fx="50%" fy="90%">
-                <stop offset="0%" stop-color="#E8A820"/>
-                <stop offset="40%" stop-color="#F2C040"/>
-                <stop offset="100%" stop-color="#D4901A"/>
+              <radialGradient id="petal-main" cx="48%" cy="88%" r="80%" fx="48%" fy="92%">
+                <stop offset="0%" stop-color="#E2940C"/>
+                <stop offset="38%" stop-color="#F4C233"/>
+                <stop offset="75%" stop-color="#F6D157"/>
+                <stop offset="100%" stop-color="#EFAE1E"/>
               </radialGradient>
-              <radialGradient id="petal-inner" cx="50%" cy="85%" r="75%">
-                <stop offset="0%" stop-color="#D4900C"/>
-                <stop offset="50%" stop-color="#E8A820"/>
-                <stop offset="100%" stop-color="#C47B10"/>
+              <radialGradient id="petal-inner" cx="48%" cy="88%" r="80%">
+                <stop offset="0%" stop-color="#C97D08"/>
+                <stop offset="40%" stop-color="#E8A820"/>
+                <stop offset="100%" stop-color="#D89614"/>
               </radialGradient>
-              <!-- Disc gradient — dark rich brown with texture suggestion -->
-              <radialGradient id="disc-grad" cx="42%" cy="38%" r="65%">
-                <stop offset="0%" stop-color="#5C3A1A"/>
-                <stop offset="55%" stop-color="#3D2408"/>
-                <stop offset="100%" stop-color="#2A1804"/>
+              <radialGradient id="disc-grad" cx="40%" cy="35%" r="68%">
+                <stop offset="0%" stop-color="#6B4424"/>
+                <stop offset="50%" stop-color="#46280F"/>
+                <stop offset="100%" stop-color="#2E1908"/>
               </radialGradient>
-              <radialGradient id="disc-sheen" cx="35%" cy="30%" r="55%">
-                <stop offset="0%" stop-color="rgba(120,80,30,0.4)"/>
+              <radialGradient id="disc-sheen" cx="33%" cy="28%" r="50%">
+                <stop offset="0%" stop-color="rgba(150,100,40,0.35)"/>
                 <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
               </radialGradient>
-              <!-- Leaf gradient -->
               <linearGradient id="leaf-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#7A9A48"/>
-                <stop offset="100%" stop-color="#5A7830"/>
+                <stop offset="0%" stop-color="#7E9E4E"/>
+                <stop offset="100%" stop-color="#577330"/>
               </linearGradient>
               <linearGradient id="leaf-grad2" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#6A8A3C"/>
-                <stop offset="100%" stop-color="#4A6825"/>
+                <stop offset="0%" stop-color="#6E8E40"/>
+                <stop offset="100%" stop-color="#496224"/>
               </linearGradient>
-              <!-- Stem gradient -->
               <linearGradient id="stem-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#5A7830"/>
-                <stop offset="40%" stop-color="#7A9A48"/>
-                <stop offset="100%" stop-color="#5A7830"/>
+                <stop offset="0%" stop-color="#577330"/>
+                <stop offset="45%" stop-color="#7E9E4E"/>
+                <stop offset="100%" stop-color="#577330"/>
               </linearGradient>
-              <!-- Shadow under flower head -->
               <radialGradient id="shadow-grad" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stop-color="rgba(60,30,10,0.12)"/>
+                <stop offset="0%" stop-color="rgba(60,30,10,0.10)"/>
                 <stop offset="100%" stop-color="rgba(60,30,10,0)"/>
               </radialGradient>
-              <filter id="petal-blur" x="-10%" y="-10%" width="120%" height="120%">
-                <feGaussianBlur stdDeviation="0.4"/>
-              </filter>
             </defs>
 
-            <!-- Stem -->
-            <path d="M120 268 C118 230 116 195 118 175" stroke="url(#stem-grad)" stroke-width="5" fill="none" stroke-linecap="round"/>
-            <path d="M118 175 C117 165 116 150 118 135" stroke="url(#stem-grad)" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+            <!-- Stem with gentle natural curve -->
+            <path d="M122 268 C119 235 113 205 121 178" stroke="url(#stem-grad)" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <path d="M121 178 C123 165 124 148 119 133" stroke="url(#stem-grad)" stroke-width="4.5" fill="none" stroke-linecap="round"/>
 
-            <!-- Left leaf -->
-            <g transform="translate(107,215) rotate(-38)">
-              <path d="M0,0 C-18,-8 -36,-6 -42,4 C-30,8 -14,6 0,0 Z" fill="url(#leaf-grad)" opacity="0.92"/>
-              <path d="M0,0 C-14,-2 -28,0 -42,4" stroke="#4A6825" stroke-width="0.7" fill="none" opacity="0.5"/>
+            <!-- Left leaf, drooping naturally -->
+            <g transform="translate(110,222) rotate(-32)">
+              <path d="M0,0 C-16,-10 -34,-9 -43,2 C-38,10 -28,12 -16,8 C-9,6 -3,3 0,0 Z" fill="url(#leaf-grad)" opacity="0.93"/>
+              <path d="M-2,-1 C-15,-1 -28,2 -40,5" stroke="#456020" stroke-width="0.6" fill="none" opacity="0.45"/>
             </g>
 
-            <!-- Right leaf -->
-            <g transform="translate(122,190) rotate(42)">
-              <path d="M0,0 C18,-8 38,-5 44,5 C30,9 15,6 0,0 Z" fill="url(#leaf-grad2)" opacity="0.88"/>
-              <path d="M0,0 C15,-1 30,2 44,5" stroke="#4A6825" stroke-width="0.7" fill="none" opacity="0.5"/>
+            <!-- Right leaf, drooping naturally -->
+            <g transform="translate(126,196) rotate(36)">
+              <path d="M0,0 C17,-9 36,-7 45,4 C39,11 28,12 16,7 C9,5 3,2 0,0 Z" fill="url(#leaf-grad2)" opacity="0.9"/>
+              <path d="M2,-1 C16,0 30,3 42,6" stroke="#3E5A1E" stroke-width="0.6" fill="none" opacity="0.45"/>
             </g>
 
-            <!-- Subtle shadow ellipse behind head -->
-            <ellipse cx="120" cy="133" rx="72" ry="12" fill="url(#shadow-grad)"/>
+            <!-- Soft ground shadow -->
+            <ellipse cx="121" cy="131" rx="70" ry="10" fill="url(#shadow-grad)"/>
 
-            <!-- ── OUTER PETAL RING (18 petals) ── -->
-            <g transform="translate(120,120)">
-              <!-- Each petal: thin pointed ellipse, rotated around center, offset outward -->
+            <!-- Flower head tilted slightly for a natural, unposed feel -->
+            <g transform="translate(120,124) rotate(-4)">
 
-              <!-- Helper: petal shape is an ellipse rx=9 ry=30 centered at cy=-52 -->
-              <!-- Rotate by N * 20deg -->
+              <!-- Back petal layer — larger, slightly randomized for organic silhouette -->
+              <g>
+                <g transform="rotate(4)">   <path d="M0,-8 C-7,-30 -8,-48 0,-60 C8,-48 7,-30 0,-8 Z" fill="url(#petal-main)"/></g>
+                <g transform="rotate(24.5)"><path d="M0,-8 C-6.5,-29 -7,-46 0,-57 C7,-46 6.5,-29 0,-8 Z" fill="url(#petal-main)"/></g>
+                <g transform="rotate(45)">  <path d="M0,-8 C-7,-31 -8,-49 0,-61 C8,-49 7,-31 0,-8 Z" fill="url(#petal-main)"/></g>
+                <g transform="rotate(65.5)"><path d="M0,-8 C-6.5,-28 -7,-45 0,-56 C7,-45 6.5,-28 0,-8 Z" fill="url(#petal-main)"/></g>
+                <g transform="rotate(86)">  <path d="M0,-8 C-7,-30 -8,-48 0,-59 C8,-48 7,-30 0,-8 Z" fill="url(#petal-main)"/></g>
+                <g transform="rotate(106.5)"><path d="M0,-8 C-6.5,-29 -7,-46 0,-58 C7,-46 6.5,-29 0,-8 Z" fill="url(#petal-main)"/></g>
+                <g transform="rotate(127)"> <path d="M0,-8 C-7,-30 -8,-47 0,-60 C8,-47 7,-30 0,-8 Z" fill="url(#petal-main)"/></g>
+                <g transform="rotate(147.5)"><path d="M0,-8 C-6.5,-28 -7,-45 0,-55 C7,-45 6.5,-28 0,-8 Z" fill="url(#petal-main)"/></g>
+                <g transform="rotate(168)"> <path d="M0,-8 C-7,-31 -8,-49 0,-60 C8,-49 7,-31 0,-8 Z" fill="url(#petal-main)"/></g>
+                <g transform="rotate(188.5)"><path d="M0,-8 C-6.5,-29 -7,-46 0,-57 C7,-46 6.5,-29 0,-8 Z" fill="url(#petal-main)"/></g>
+                <g transform="rotate(209)"> <path d="M0,-8 C-7,-30 -8,-48 0,-59 C8,-48 7,-30 0,-8 Z" fill="url(#petal-main)"/></g>
+                <g transform="rotate(229.5)"><path d="M0,-8 C-6.5,-28 -7,-45 0,-56 C7,-45 6.5,-28 0,-8 Z" fill="url(#petal-main)"/></g>
+                <g transform="rotate(250)"> <path d="M0,-8 C-7,-31 -8,-49 0,-61 C8,-49 7,-31 0,-8 Z" fill="url(#petal-main)"/></g>
+                <g transform="rotate(270.5)"><path d="M0,-8 C-6.5,-29 -7,-46 0,-58 C7,-46 6.5,-29 0,-8 Z" fill="url(#petal-main)"/></g>
+                <g transform="rotate(291)"> <path d="M0,-8 C-7,-30 -8,-47 0,-59 C8,-47 7,-30 0,-8 Z" fill="url(#petal-main)"/></g>
+                <g transform="rotate(311.5)"><path d="M0,-8 C-6.5,-28 -7,-45 0,-55 C7,-45 6.5,-28 0,-8 Z" fill="url(#petal-main)"/></g>
+                <g transform="rotate(332)"> <path d="M0,-8 C-7,-30 -8,-48 0,-60 C8,-48 7,-30 0,-8 Z" fill="url(#petal-main)"/></g>
+                <g transform="rotate(352.5)"><path d="M0,-8 C-6.5,-29 -7,-46 0,-57 C7,-46 6.5,-29 0,-8 Z" fill="url(#petal-main)"/></g>
+              </g>
 
-              <g transform="rotate(0)">  <ellipse cx="0" cy="-52" rx="9.5" ry="28" fill="url(#petal-main)" opacity="0.95" filter="url(#petal-blur)"/></g>
-              <g transform="rotate(20)"> <ellipse cx="0" cy="-52" rx="9"   ry="27" fill="url(#petal-main)" opacity="0.92"/></g>
-              <g transform="rotate(40)"> <ellipse cx="0" cy="-53" rx="9.5" ry="28" fill="url(#petal-main)" opacity="0.95"/></g>
-              <g transform="rotate(60)"> <ellipse cx="0" cy="-51" rx="9"   ry="27" fill="url(#petal-main)" opacity="0.90"/></g>
-              <g transform="rotate(80)"> <ellipse cx="0" cy="-52" rx="9.5" ry="28" fill="url(#petal-main)" opacity="0.93"/></g>
-              <g transform="rotate(100)"><ellipse cx="0" cy="-52" rx="9"   ry="27" fill="url(#petal-main)" opacity="0.91"/></g>
-              <g transform="rotate(120)"><ellipse cx="0" cy="-53" rx="9.5" ry="28" fill="url(#petal-main)" opacity="0.94"/></g>
-              <g transform="rotate(140)"><ellipse cx="0" cy="-51" rx="9"   ry="26" fill="url(#petal-main)" opacity="0.89"/></g>
-              <g transform="rotate(160)"><ellipse cx="0" cy="-52" rx="9.5" ry="28" fill="url(#petal-main)" opacity="0.95"/></g>
-              <g transform="rotate(180)"><ellipse cx="0" cy="-52" rx="9"   ry="27" fill="url(#petal-main)" opacity="0.92"/></g>
-              <g transform="rotate(200)"><ellipse cx="0" cy="-53" rx="9.5" ry="28" fill="url(#petal-main)" opacity="0.93"/></g>
-              <g transform="rotate(220)"><ellipse cx="0" cy="-51" rx="9"   ry="27" fill="url(#petal-main)" opacity="0.90"/></g>
-              <g transform="rotate(240)"><ellipse cx="0" cy="-52" rx="9.5" ry="28" fill="url(#petal-main)" opacity="0.94"/></g>
-              <g transform="rotate(260)"><ellipse cx="0" cy="-52" rx="9"   ry="26" fill="url(#petal-main)" opacity="0.88"/></g>
-              <g transform="rotate(280)"><ellipse cx="0" cy="-53" rx="9.5" ry="28" fill="url(#petal-main)" opacity="0.95"/></g>
-              <g transform="rotate(300)"><ellipse cx="0" cy="-52" rx="9"   ry="27" fill="url(#petal-main)" opacity="0.91"/></g>
-              <g transform="rotate(320)"><ellipse cx="0" cy="-52" rx="9.5" ry="28" fill="url(#petal-main)" opacity="0.94"/></g>
-              <g transform="rotate(340)"><ellipse cx="0" cy="-51" rx="9"   ry="26" fill="url(#petal-main)" opacity="0.90"/></g>
+              <!-- Front petal layer — offset, shorter, with subtle inner shading and a slight curl for dimension -->
+              <g>
+                <g transform="rotate(13)"> <path d="M0,-6 C-5.5,-23 -6,-37 0,-46 C6,-37 5.5,-23 0,-6 Z" fill="url(#petal-inner)" opacity="0.92"/></g>
+                <g transform="rotate(33.5)"><path d="M0,-6 C-5,-21 -5.5,-34 0,-42 C5.5,-34 5,-21 0,-6 Z" fill="url(#petal-inner)" opacity="0.9"/></g>
+                <g transform="rotate(54)"> <path d="M0,-6 C-5.5,-22 -6,-36 0,-44 C6,-36 5.5,-22 0,-6 Z" fill="url(#petal-inner)" opacity="0.92"/></g>
+                <g transform="rotate(74.5)"><path d="M0,-6 C-5,-20 -5.5,-33 0,-40 C5.5,-33 5,-20 0,-6 Z" fill="url(#petal-inner)" opacity="0.88"/></g>
+                <g transform="rotate(95)"> <path d="M0,-6 C-5.5,-23 -6,-37 0,-45 C6,-37 5.5,-23 0,-6 Z" fill="url(#petal-inner)" opacity="0.91"/></g>
+                <g transform="rotate(115.5)"><path d="M0,-6 C-5,-21 -5.5,-35 0,-43 C5.5,-35 5,-21 0,-6 Z" fill="url(#petal-inner)" opacity="0.89"/></g>
+                <g transform="rotate(136)"><path d="M0,-6 C-5.5,-22 -6,-36 0,-44 C6,-36 5.5,-22 0,-6 Z" fill="url(#petal-inner)" opacity="0.92"/></g>
+                <g transform="rotate(156.5)"><path d="M0,-6 C-5,-20 -5.5,-32 0,-39 C5.5,-32 5,-20 0,-6 Z" fill="url(#petal-inner)" opacity="0.87"/></g>
+                <g transform="rotate(177)"><path d="M0,-6 C-5.5,-23 -6,-37 0,-45 C6,-37 5.5,-23 0,-6 Z" fill="url(#petal-inner)" opacity="0.91"/></g>
+                <g transform="rotate(197.5)"><path d="M0,-6 C-5,-21 -5.5,-35 0,-43 C5.5,-35 5,-21 0,-6 Z" fill="url(#petal-inner)" opacity="0.89"/></g>
+                <g transform="rotate(218)"><path d="M0,-6 C-5.5,-22 -6,-36 0,-44 C6,-36 5.5,-22 0,-6 Z" fill="url(#petal-inner)" opacity="0.92"/></g>
+                <g transform="rotate(238.5)"><path d="M0,-6 C-5,-20 -5.5,-33 0,-40 C5.5,-33 5,-20 0,-6 Z" fill="url(#petal-inner)" opacity="0.88"/></g>
+                <g transform="rotate(259)"><path d="M0,-6 C-5.5,-23 -6,-37 0,-45 C6,-37 5.5,-23 0,-6 Z" fill="url(#petal-inner)" opacity="0.91"/></g>
+                <g transform="rotate(279.5)"><path d="M0,-6 C-5,-21 -5.5,-34 0,-42 C5.5,-34 5,-21 0,-6 Z" fill="url(#petal-inner)" opacity="0.89"/></g>
+                <g transform="rotate(300)"><path d="M0,-6 C-5.5,-22 -6,-36 0,-44 C6,-36 5.5,-22 0,-6 Z" fill="url(#petal-inner)" opacity="0.92"/></g>
+                <g transform="rotate(320.5)"><path d="M0,-6 C-5,-20 -5.5,-32 0,-39 C5.5,-32 5,-20 0,-6 Z" fill="url(#petal-inner)" opacity="0.87"/></g>
+                <g transform="rotate(341)"><path d="M0,-6 C-5.5,-23 -6,-37 0,-45 C6,-37 5.5,-23 0,-6 Z" fill="url(#petal-inner)" opacity="0.91"/></g>
+
+                <!-- subtle midline crease on a few front petals for realism -->
+                <g transform="rotate(13)"><path d="M0,-10 L0,-44" stroke="#A86C0A" stroke-width="0.5" opacity="0.35"/></g>
+                <g transform="rotate(95)"><path d="M0,-10 L0,-43" stroke="#A86C0A" stroke-width="0.5" opacity="0.35"/></g>
+                <g transform="rotate(177)"><path d="M0,-10 L0,-43" stroke="#A86C0A" stroke-width="0.5" opacity="0.35"/></g>
+                <g transform="rotate(259)"><path d="M0,-10 L0,-43" stroke="#A86C0A" stroke-width="0.5" opacity="0.35"/></g>
+              </g>
+
+              <!-- Disc -->
+              <circle cx="0" cy="0" r="34" fill="url(#disc-grad)"/>
+              <circle cx="0" cy="0" r="34" fill="url(#disc-sheen)"/>
+
+              <!-- Phyllotaxis seed spiral, true golden-angle pattern for a natural look -->
+              <g fill="#7A4F28" opacity="0.6">
+                <circle cx="0" cy="0" r="1.6"/>
+              </g>
+              <g id="seedSpiral" fill="#7A4F28" opacity="0.58"></g>
+
+              <!-- Disc rim highlight -->
+              <circle cx="0" cy="0" r="34" fill="none" stroke="#221205" stroke-width="1.4" opacity="0.35"/>
+              <circle cx="-9" cy="-11" r="16" fill="none" stroke="#9A6E3C" stroke-width="0.6" opacity="0.18"/>
             </g>
-
-            <!-- ── INNER PETAL RING (offset by 10deg, slightly shorter) ── -->
-            <g transform="translate(120,120)">
-              <g transform="rotate(10)"> <ellipse cx="0" cy="-44" rx="8"   ry="23" fill="url(#petal-inner)" opacity="0.80"/></g>
-              <g transform="rotate(30)"> <ellipse cx="0" cy="-44" rx="7.5" ry="22" fill="url(#petal-inner)" opacity="0.78"/></g>
-              <g transform="rotate(50)"> <ellipse cx="0" cy="-44" rx="8"   ry="23" fill="url(#petal-inner)" opacity="0.80"/></g>
-              <g transform="rotate(70)"> <ellipse cx="0" cy="-44" rx="7.5" ry="22" fill="url(#petal-inner)" opacity="0.76"/></g>
-              <g transform="rotate(90)"> <ellipse cx="0" cy="-44" rx="8"   ry="23" fill="url(#petal-inner)" opacity="0.80"/></g>
-              <g transform="rotate(110)"><ellipse cx="0" cy="-44" rx="7.5" ry="22" fill="url(#petal-inner)" opacity="0.78"/></g>
-              <g transform="rotate(130)"><ellipse cx="0" cy="-44" rx="8"   ry="23" fill="url(#petal-inner)" opacity="0.80"/></g>
-              <g transform="rotate(150)"><ellipse cx="0" cy="-44" rx="7.5" ry="22" fill="url(#petal-inner)" opacity="0.76"/></g>
-              <g transform="rotate(170)"><ellipse cx="0" cy="-44" rx="8"   ry="23" fill="url(#petal-inner)" opacity="0.80"/></g>
-              <g transform="rotate(190)"><ellipse cx="0" cy="-44" rx="7.5" ry="22" fill="url(#petal-inner)" opacity="0.78"/></g>
-              <g transform="rotate(210)"><ellipse cx="0" cy="-44" rx="8"   ry="23" fill="url(#petal-inner)" opacity="0.80"/></g>
-              <g transform="rotate(230)"><ellipse cx="0" cy="-44" rx="7.5" ry="22" fill="url(#petal-inner)" opacity="0.76"/></g>
-              <g transform="rotate(250)"><ellipse cx="0" cy="-44" rx="8"   ry="23" fill="url(#petal-inner)" opacity="0.80"/></g>
-              <g transform="rotate(270)"><ellipse cx="0" cy="-44" rx="7.5" ry="22" fill="url(#petal-inner)" opacity="0.78"/></g>
-              <g transform="rotate(290)"><ellipse cx="0" cy="-44" rx="8"   ry="23" fill="url(#petal-inner)" opacity="0.80"/></g>
-              <g transform="rotate(310)"><ellipse cx="0" cy="-44" rx="7.5" ry="22" fill="url(#petal-inner)" opacity="0.76"/></g>
-              <g transform="rotate(330)"><ellipse cx="0" cy="-44" rx="8"   ry="23" fill="url(#petal-inner)" opacity="0.80"/></g>
-              <g transform="rotate(350)"><ellipse cx="0" cy="-44" rx="7.5" ry="22" fill="url(#petal-inner)" opacity="0.78"/></g>
-            </g>
-
-            <!-- ── DISC ── -->
-            <!-- Base disc -->
-            <circle cx="120" cy="120" r="36" fill="url(#disc-grad)"/>
-            <!-- Surface sheen -->
-            <circle cx="120" cy="120" r="36" fill="url(#disc-sheen)"/>
-            <!-- Seed spiral pattern — phyllotaxis-inspired concentric rings of dots -->
-            <g transform="translate(120,120)" fill="#8B5A2B" opacity="0.55">
-              <!-- Ring 1 (innermost, 5 seeds) -->
-              <circle cx="0"    cy="-7"   r="1.8"/>
-              <circle cx="6.7"  cy="2.2"  r="1.8"/>
-              <circle cx="4.1"  cy="5.7"  r="1.8"/>
-              <circle cx="-4.1" cy="5.7"  r="1.8"/>
-              <circle cx="-6.7" cy="2.2"  r="1.8"/>
-              <!-- Ring 2 (8 seeds) -->
-              <circle cx="0"    cy="-14"  r="1.9"/>
-              <circle cx="9.9"  cy="-9.9" r="1.9"/>
-              <circle cx="14"   cy="0"    r="1.9"/>
-              <circle cx="9.9"  cy="9.9"  r="1.9"/>
-              <circle cx="0"    cy="14"   r="1.9"/>
-              <circle cx="-9.9" cy="9.9"  r="1.9"/>
-              <circle cx="-14"  cy="0"    r="1.9"/>
-              <circle cx="-9.9" cy="-9.9" r="1.9"/>
-              <!-- Ring 3 (13 seeds) -->
-              <circle cx="0"    cy="-21"  r="1.7"/>
-              <circle cx="9.9"  cy="-18.4"r="1.7"/>
-              <circle cx="18.4" cy="-9.9" r="1.7"/>
-              <circle cx="21"   cy="0"    r="1.7"/>
-              <circle cx="18.4" cy="9.9"  r="1.7"/>
-              <circle cx="9.9"  cy="18.4" r="1.7"/>
-              <circle cx="0"    cy="21"   r="1.7"/>
-              <circle cx="-9.9" cy="18.4" r="1.7"/>
-              <circle cx="-18.4"cy="9.9"  r="1.7"/>
-              <circle cx="-21"  cy="0"    r="1.7"/>
-              <circle cx="-18.4"cy="-9.9" r="1.7"/>
-              <circle cx="-9.9" cy="-18.4"r="1.7"/>
-              <circle cx="-4.8" cy="-20.4"r="1.7"/>
-              <!-- Ring 4 (21 seeds — outer band) -->
-              <circle cx="0"    cy="-29"  r="1.5"/>
-              <circle cx="8.5"  cy="-27.3"r="1.5"/>
-              <circle cx="16"   cy="-23"  r="1.5"/>
-              <circle cx="22"   cy="-16"  r="1.5"/>
-              <circle cx="26"   cy="-8"   r="1.5"/>
-              <circle cx="27"   cy="0"    r="1.5"/>
-              <circle cx="26"   cy="8"    r="1.5"/>
-              <circle cx="22"   cy="16"   r="1.5"/>
-              <circle cx="16"   cy="22"   r="1.5"/>
-              <circle cx="8.5"  cy="27.3" r="1.5"/>
-              <circle cx="0"    cy="29"   r="1.5"/>
-              <circle cx="-8.5" cy="27.3" r="1.5"/>
-              <circle cx="-16"  cy="22"   r="1.5"/>
-              <circle cx="-22"  cy="16"   r="1.5"/>
-              <circle cx="-26"  cy="8"    r="1.5"/>
-              <circle cx="-27"  cy="0"    r="1.5"/>
-              <circle cx="-26"  cy="-8"   r="1.5"/>
-              <circle cx="-22"  cy="-16"  r="1.5"/>
-              <circle cx="-16"  cy="-22"  r="1.5"/>
-              <circle cx="-8.5" cy="-27.3"r="1.5"/>
-              <circle cx="-4"   cy="-28.7"r="1.5"/>
-            </g>
-            <!-- Lighter seed highlights (very subtle) -->
-            <g transform="translate(120,120)" fill="#A07040" opacity="0.25">
-              <circle cx="0"    cy="-7"   r="0.8"/>
-              <circle cx="6.7"  cy="2.2"  r="0.8"/>
-              <circle cx="-6.7" cy="2.2"  r="0.8"/>
-              <circle cx="14"   cy="0"    r="0.8"/>
-              <circle cx="-14"  cy="0"    r="0.8"/>
-              <circle cx="0"    cy="14"   r="0.8"/>
-            </g>
-            <!-- Thin disc edge ring -->
-            <circle cx="120" cy="120" r="36" fill="none" stroke="#2A1804" stroke-width="1.5" opacity="0.3"/>
           </svg>
         </div>
 
         <div class="front-meta">
-          <p class="meta-date">August 30th</p>
+          <p class="meta-date">Sunday, August 30th</p>
           <p class="meta-location">The Farm — Green Isle, Minnesota</p>
         </div>
 
@@ -590,8 +680,8 @@ body {
           RSVP
         </a>
 
-        <p class="flip-hint" onclick="document.getElementById('card').classList.toggle('flipped')" style="margin-top:18px;">
-          Turn over for details
+        <p class="flip-hint">
+          Tap to turn over for details
         </p>
 
       </div>
@@ -599,24 +689,24 @@ body {
 
     <!-- ══ BACK ══ -->
     <div class="face face-back">
-      <div class="back-card">
+      <div class="back-card" id="backCard">
 
         <div class="back-header">
           <p class="back-title">Uma's Farmers Market Birthday</p>
-          <p class="back-subtitle">August 30th — The Farm, Green Isle, MN</p>
+          <p class="back-subtitle">Sunday, August 30th — The Farm, Green Isle, MN</p>
         </div>
 
         <div class="back-section">
           <p class="section-heading">The gathering</p>
           <p class="section-body">
-            Come to the farm for Uma's 29th — an open afternoon of making, trading, eating, and being outside together. Good food, good people, wide open land.
+            Come celebrate at the farm for Uma's 29th — an open afternoon of connection, trading, eating, and being outside together. Good food, good people, wide open land.
           </p>
         </div>
 
         <div class="back-section">
-          <p class="section-heading">Make something to trade</p>
+          <p class="section-heading">Make something to trade — <strong>optional</strong></p>
           <p class="section-body" style="margin-bottom:12px;">
-            Bring something handmade to share and swap with what others have made. Anything goes — simple and heartfelt is the spirit.
+            Bring something handmade to share and swap with what others have made. Anything goes — simple and heartfelt is the spirit. Don't stress, let it be easy.
           </p>
           <ul class="item-list">
             <li>Baked goods or preserves</li>
@@ -625,6 +715,7 @@ body {
             <li>Knitted or sewn things</li>
             <li>Dried herbs or garden goods</li>
             <li>Anything made with care</li>
+            <li><button type="button" class="more-ideas-link" id="moreIdeasBtn">More ideas</button></li>
           </ul>
         </div>
 
@@ -632,10 +723,9 @@ body {
           <p class="section-heading">We'll Eat</p>
           <div class="food-row">
             <span>Burgers</span>
+            <span>Hot dogs</span>
             <span>Corn</span>
-            <span>Fruit</span>
-            <span>Charcuterie</span>
-            <span>Mocktails</span>
+            <span>Snacks</span>
           </div>
         </div>
 
@@ -651,7 +741,7 @@ body {
           RSVP
         </a>
 
-        <p class="back-flip-hint" onclick="document.getElementById('card').classList.toggle('flipped')">
+        <p class="back-flip-hint">
           Back to invitation
         </p>
 
@@ -660,6 +750,120 @@ body {
 
   </div>
 </div>
+
+<!-- ══ MORE IDEAS MODAL ══ -->
+<div class="modal-overlay" id="moreIdeasModal">
+  <div class="modal-card">
+    <button type="button" class="modal-close" id="moreIdeasClose">Close</button>
+    <p class="modal-title">More ideas to trade</p>
+
+    <div class="modal-group">
+      <p class="modal-group-heading">Non-food items</p>
+      <ul class="modal-list">
+        <li>Bookmarks</li>
+        <li>Face cream</li>
+        <li>Body cream</li>
+        <li>Mini bouquets (fresh flowers)</li>
+        <li>Plant clippings</li>
+        <li>Plain canvas tote bags to paint</li>
+        <li>Candles</li>
+        <li>Soap</li>
+        <li>Magnets</li>
+        <li>Tote bags</li>
+      </ul>
+    </div>
+
+    <div class="modal-group">
+      <p class="modal-group-heading">Edible items</p>
+      <ul class="modal-list">
+        <li>Granola</li>
+        <li>Trail mix</li>
+        <li>Hummus</li>
+        <li>Bread</li>
+        <li>Baked goods</li>
+        <li>Jams</li>
+        <li>Cookies</li>
+        <li>Home-grown produce from your garden</li>
+        <li>Fresh pressed juice</li>
+        <li>Pesto</li>
+        <li>Fresh herbs from garden</li>
+        <li>Homemade pickles, onions, or beets</li>
+        <li>Homemade salsa</li>
+        <li>Fresh eggs</li>
+        <li>Simple syrups</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+  var card = document.getElementById('card');
+  var frontCard = document.getElementById('frontCard');
+  var backCard = document.getElementById('backCard');
+  var moreIdeasBtn = document.getElementById('moreIdeasBtn');
+  var moreIdeasModal = document.getElementById('moreIdeasModal');
+  var moreIdeasClose = document.getElementById('moreIdeasClose');
+
+  function toggleFlip() {
+    card.classList.toggle('flipped');
+  }
+
+  // Tap anywhere on the front card flips to the back,
+  // except when the tap originated on the RSVP link
+  frontCard.addEventListener('click', function (e) {
+    if (e.target.closest('.rsvp-link')) {
+      return;
+    }
+    toggleFlip();
+  });
+
+  // Tap anywhere on the back card flips to the front,
+  // except when the tap originated on the RSVP link or the More Ideas button
+  backCard.addEventListener('click', function (e) {
+    if (e.target.closest('.back-rsvp-link') || e.target.closest('#moreIdeasBtn')) {
+      return;
+    }
+    toggleFlip();
+  });
+
+  moreIdeasBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    moreIdeasModal.classList.add('open');
+  });
+
+  moreIdeasClose.addEventListener('click', function (e) {
+    e.stopPropagation();
+    moreIdeasModal.classList.remove('open');
+  });
+
+  moreIdeasModal.addEventListener('click', function (e) {
+    if (e.target === moreIdeasModal) {
+      moreIdeasModal.classList.remove('open');
+    }
+  });
+
+  // Build a true phyllotaxis (golden-angle) seed spiral for the disc
+  (function () {
+    var ns = "http://www.w3.org/2000/svg";
+    var group = document.getElementById('seedSpiral');
+    var n = 180;
+    var c = 2.1;
+    var goldenAngle = 137.50776405;
+    for (var i = 1; i <= n; i++) {
+      var angle = i * goldenAngle * Math.PI / 180;
+      var r = c * Math.sqrt(i);
+      if (r > 31) break;
+      var x = r * Math.cos(angle);
+      var y = r * Math.sin(angle);
+      var circle = document.createElementNS(ns, "circle");
+      circle.setAttribute("cx", x.toFixed(2));
+      circle.setAttribute("cy", y.toFixed(2));
+      var radius = 0.9 + (r / 31) * 0.9;
+      circle.setAttribute("r", radius.toFixed(2));
+      group.appendChild(circle);
+    }
+  })();
+</script>
 
 </body>
 </html>
